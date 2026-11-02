@@ -13,4 +13,4 @@ Run `npm install`, then `npm run dev`. Build with `npm run build`.
 Edit `content/site.ts` to add gallery entries or change Instagram, email and WhatsApp details. Add photo files to `public/images`. Each entry contains category, title, image and accessible alt text.
 
 ## Enquiries
-The form validates fields and creates a message for visitors to copy and send to the verified Instagram profile. It does not submit, transmit or persist form data. No inbox or backend is configured. The WhatsApp button explains availability until a number is configured; after configuration it opens the designated chat. The email and phone placeholders are intentional.
+Submitting the form opens WhatsApp with the enquiry pre-filled for the configured official number; the visitor reviews and sends it in WhatsApp. The website does not submit or store form data. The email address is also listed as an alternative contact. Contact details are in `content/site.ts`.

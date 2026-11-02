@@ -1,17 +1,480 @@
-'use client';
-import { useState, type FormEvent } from 'react';
-import { site, categories, events } from '../content/site';
+"use client";
+import { useState, type FormEvent } from "react";
+import { site, categories, events } from "../content/site";
 export default function Home() {
-const [filter,setFilter]=useState('All occasions');
-const [menu,setMenu]=useState(false);
-const [whatsappNotice,setWhatsappNotice]=useState(false);
-const [message,setMessage]=useState('');
-const [copied,setCopied]=useState(false);
-function prepareEnquiry(e:FormEvent<HTMLFormElement>){e.preventDefault();const f=new FormData(e.currentTarget);setCopied(false);setMessage(`Hello Moran Events! I'd love to plan an event with you.\n\nName: ${f.get('name')}\nEmail: ${f.get('email')}\nPhone: ${f.get('phone')}\nEvent: ${f.get('type')}\nDate: ${f.get('date')||'To be confirmed'}\nLocation: ${f.get('location')}\nGuests: ${f.get('guests')}\n\n${f.get('description')}`);}
-async function copyMessage(){try{await navigator.clipboard.writeText(message);setCopied(true)}catch{setCopied(false);}}
-return <main id="top"><a className="skip-link" href="#about">Skip to content</a><header><a className="brand" href="#"><img src="/images/moran-logo.png" alt="Moran Events" width="78" height="78"/></a><button type="button" className="menu-button" aria-label="Toggle navigation" aria-expanded={menu} aria-controls="main-navigation" onClick={()=>setMenu(!menu)}>☰</button><nav id="main-navigation" className={menu?"open":""} onClick={()=>setMenu(false)}><a href="#about">Our story</a><a href="#services">Services</a><a href="#gallery">Our work</a><a className="button dark" href="#contact">Plan your event ↗</a></nav></header><section className="hero"><img className="hero-image" src="/images/celebration.jpg" alt="Illustrative wedding table setting, awaiting Moran event photography"/><div className="hero-shade"/><div className="hero-content"><p className="eyebrow">MEANINGFUL MOMENTS. BEAUTIFULLY MADE.</p><h1>Beautifully planned.<br/><em>Unforgettably</em><br/>celebrated.</h1><p>From the first idea to the final detail, we bring your<br className="desktop"/> celebration to life. Thoughtfully. Beautifully. Together.</p><div className="actions"><a className="button light" href="#contact">Plan Your Event <span>↗</span></a><a className="button outline" href="#gallery">View Our Work <span>↗</span></a></div></div><div className="hero-bottom"><span>WEDDINGS · TRADITIONS · CORPORATE · CELEBRATIONS</span><span>Illustrative photo · Moran photography coming soon</span></div></section><section className="intro" id="about"><p className="eyebrow">MORAN EVENTS · KENYA</p><h2>For the moments<br/>that <em>bring us together.</em></h2><p>Every celebration begins with a story. We help you tell yours through thoughtful planning, beautiful spaces, and the details that make people feel welcome.</p></section><section className="services section" id="services"><div className="section-heading"><div><p className="eyebrow">THE DETAILS THAT MAKE THE DAY</p><h2>Your vision.<br/><em>Our thoughtful touch.</em></h2></div><p>One team, bringing every element together.<br/>Choose what you need, and let’s create a setting<br/>that feels completely yours.</p></div><div className="service-grid">{[['01','Tentage','A beautiful space to gather. Thoughtfully selected tentage to suit your setting, guest list and occasion.'],['02','Furniture','Make everyone feel welcome. Tables, chairs and furnishings that bring comfort and character to your event.'],['03','Décor & styling','The atmosphere is in the details. Considered colours, textures and finishing touches, shaped around your story.'],['04','Event management','Enjoy being in the moment. Support with planning and coordination to bring the moving parts together.']].map(([n,t,d])=><article key={n}><span className="service-number">{n}</span><h3>{t}</h3><p>{d}</p><a href="#contact">Let’s make it happen <span>↗</span></a></article>)}</div></section>
-<section className="gallery section" id="gallery"><div className="section-heading"><div><p className="eyebrow">A FEEL FOR YOUR CELEBRATION</p><h2>So many ways<br/><em>to make it memorable.</em></h2></div><a className="text-link" href={site.instagram} target="_blank" rel="noreferrer">See Moran’s work on Instagram ↗</a></div><p className="gallery-note">A little inspiration while our portfolio takes shape. Images below are illustrative, not Moran Events projects.</p><div className="filters" aria-label="Filter by event type">{categories.map(c=><button type="button" key={c} aria-pressed={filter===c} onClick={()=>setFilter(c)}>{c}</button>)}</div><div className="gallery-grid">{events.filter(e=>filter==='All occasions'||e.category===filter).map(e=><article className="event-card" key={e.title}><div className="event-image"><img src={e.image} alt={e.alt} loading="lazy" width="900" height="1000"/><span>INSPIRATION</span></div><div className="event-caption"><div><p className="eyebrow">{e.category}</p><h3>{e.title}</h3></div><a href="#contact" aria-label={`Enquire about ${e.category}`}>↗</a></div></article>)}</div></section>
-<section className="process section" id="process"><p className="eyebrow">FROM A LITTLE IDEA TO A LOVELY DAY</p><h2>A thoughtful journey.<br/><em>Every step of the way.</em></h2><div className="steps">{[['01','Tell us your story','Share your occasion, your ideas and what matters most. We start by listening.'],['02','Shape the details','Together, we explore the setting, styling and services that fit your celebration.'],['03','Bring it to life','We coordinate the agreed details so you can welcome your guests and enjoy your day.']].map(([n,t,d])=><article key={n}><span>{n}</span><h3>{t}</h3><p>{d}</p></article>)}</div></section>
-<section className="contact section" id="contact"><div className="contact-copy"><p className="eyebrow">LET’S CREATE SOMETHING BEAUTIFUL</p><h2>Your next chapter<br/><em>starts here.</em></h2><p>A wedding, a family tradition, a company milestone.<br/>Whatever brings you together, we’d love to help<br/>make it special.</p><a className="text-link" href={site.instagram} target="_blank" rel="noreferrer">Find us @moraneventske ↗</a><div className="contact-details"><p><span>BASED IN</span>Kenya</p><p><span>EMAIL</span>{site.email||'To be provided'}</p><p><span>PHONE / WHATSAPP</span>{site.whatsapp||'To be provided'}</p></div><button className="button dark" type="button" onClick={()=>site.whatsapp?window.open(`https://wa.me/${site.whatsapp.replace(/\D/g,'')}`,'_blank','noopener'):setWhatsappNotice(true)}>Enquire on WhatsApp ↗</button>{whatsappNotice&&<p role="status" className="notice">Our WhatsApp number will be added soon. Please message <a href={site.instagram} target="_blank" rel="noreferrer">@moraneventske on Instagram</a>.</p>}</div><form onSubmit={prepareEnquiry}><h3>Tell us about your event</h3><p className="form-intro">A few details are all we need to start the conversation.</p><div className="form-grid"><label>Your name<input name="name" autoComplete="name" placeholder="Full name" required maxLength={100}/></label><label>Email address<input name="email" type="email" autoComplete="email" placeholder="you@example.com" required maxLength={200}/></label><label>Phone number<input name="phone" type="tel" autoComplete="tel" placeholder="+254 …" required maxLength={30}/></label><label>Event type<select name="type" required defaultValue=""><option value="" disabled>Select your occasion</option>{categories.slice(1).map(c=><option key={c}>{c}</option>)}<option>Other</option></select></label><label>Event date <small>(if known)</small><input name="date" type="date" min={new Date().toLocaleDateString('en-CA')}/></label><label>Expected guests<input name="guests" type="number" min="1" max="100000" placeholder="Approximate number" required/></label><label className="full">Event location<input name="location" placeholder="Town, venue or area in Kenya" required maxLength={200}/></label><label className="full">What do you have in mind?<textarea name="description" rows={3} placeholder="Tell us about your ideas and the services you need…" required maxLength={2500}/></label></div><p className="form-note">This form prepares a message for you to copy and send on Instagram. Your details are not submitted or stored here.</p><button type="submit" className="button dark submit">Prepare my enquiry <span>↗</span></button>{message&&<div className="message-panel" aria-live="polite"><h4>Your enquiry is ready — not yet sent</h4><textarea aria-label="Your prepared enquiry" readOnly value={message} rows={8}/><button className="button dark" type="button" onClick={copyMessage}>{copied?'Copied ✓':'Copy enquiry'}</button><a className="text-link" href={site.instagram} target="_blank" rel="noreferrer">Open Instagram ↗</a><p>Paste your message into a direct message to @moraneventske.</p></div>}</form></section>
-<footer><div className="footer-top"><a href="#top"><img src="/images/moran-logo.png" width="135" height="100" alt="Moran Events"/></a><p>Beautifully planned.<br/><em>Unforgettably celebrated.</em></p><a href={site.instagram} target="_blank" rel="noreferrer">Instagram ↗</a></div><div className="footer-bottom"><span>© {new Date().getFullYear()} Moran Events. Made for moments that matter.</span><a href="#top">Back to top ↑</a></div></footer>
-</main> }
+  const [filter, setFilter] = useState("All occasions");
+  const [menu, setMenu] = useState(false);
+  const [whatsappNotice, setWhatsappNotice] = useState(false);
+  const [message, setMessage] = useState("");
+  const [copied, setCopied] = useState(false);
+  function prepareEnquiry(e: FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    const f = new FormData(e.currentTarget);
+    setCopied(false);
+    const enquiry = `Hello Moran Events! I'd love to plan an event with you.\n\nName: ${f.get("name")}\nEmail: ${f.get("email")}\nPhone: ${f.get("phone")}\nEvent: ${f.get("type")}\nDate: ${f.get("date") || "To be confirmed"}\nLocation: ${f.get("location")}\nGuests: ${f.get("guests")}\n\n${f.get("description")}`;
+    setMessage(enquiry);
+    window.open(
+      `https://wa.me/${site.whatsapp}?text=${encodeURIComponent(enquiry)}`,
+      "_blank",
+      "noopener,noreferrer",
+    );
+  }
+  async function copyMessage() {
+    try {
+      await navigator.clipboard.writeText(message);
+      setCopied(true);
+    } catch {
+      setCopied(false);
+    }
+  }
+  return (
+    <main id="top">
+      <a className="skip-link" href="#about">
+        Skip to content
+      </a>
+      <header>
+        <a className="brand" href="#">
+          <img
+            src="/images/moran-logo.png"
+            alt="Moran Events"
+            width="78"
+            height="78"
+          />
+        </a>
+        <button
+          type="button"
+          className="menu-button"
+          aria-label="Toggle navigation"
+          aria-expanded={menu}
+          aria-controls="main-navigation"
+          onClick={() => setMenu(!menu)}
+        >
+          ☰
+        </button>
+        <nav
+          id="main-navigation"
+          className={menu ? "open" : ""}
+          onClick={() => setMenu(false)}
+        >
+          <a href="#about">Our story</a>
+          <a href="#services">Services</a>
+          <a href="#gallery">Our work</a>
+          <a className="button dark" href="#contact">
+            Plan your event ↗
+          </a>
+        </nav>
+      </header>
+      <section className="hero">
+        <img
+          className="hero-image"
+          src="/images/celebration.jpg"
+          alt="Illustrative wedding table setting, awaiting Moran event photography"
+        />
+        <div className="hero-shade" />
+        <div className="hero-content">
+          <p className="eyebrow">MEANINGFUL MOMENTS. BEAUTIFULLY MADE.</p>
+          <h1>
+            Beautifully planned.
+            <br />
+            <em>Unforgettably</em>
+            <br />
+            celebrated.
+          </h1>
+          <p>
+            From the first idea to the final detail, we bring your
+            <br className="desktop" /> celebration to life. Thoughtfully.
+            Beautifully. Together.
+          </p>
+          <div className="actions">
+            <a className="button light" href="#contact">
+              Plan Your Event <span>↗</span>
+            </a>
+            <a className="button outline" href="#gallery">
+              View Our Work <span>↗</span>
+            </a>
+          </div>
+        </div>
+        <div className="hero-bottom">
+          <span>WEDDINGS · TRADITIONS · CORPORATE · CELEBRATIONS</span>
+          <span>Illustrative photo · Moran photography coming soon</span>
+        </div>
+      </section>
+      <section className="intro" id="about">
+        <p className="eyebrow">MORAN EVENTS · KENYA</p>
+        <h2>
+          For the moments
+          <br />
+          that <em>bring us together.</em>
+        </h2>
+        <p>
+          Every celebration begins with a story. We help you tell yours through
+          thoughtful planning, beautiful spaces, and the details that make
+          people feel welcome.
+        </p>
+      </section>
+      <section className="services section" id="services">
+        <div className="section-heading">
+          <div>
+            <p className="eyebrow">THE DETAILS THAT MAKE THE DAY</p>
+            <h2>
+              Your vision.
+              <br />
+              <em>Our thoughtful touch.</em>
+            </h2>
+          </div>
+          <p>
+            One team, bringing every element together.
+            <br />
+            Choose what you need, and let’s create a setting
+            <br />
+            that feels completely yours.
+          </p>
+        </div>
+        <div className="service-grid">
+          {[
+            [
+              "01",
+              "Tentage",
+              "A beautiful space to gather. Thoughtfully selected tentage to suit your setting, guest list and occasion.",
+            ],
+            [
+              "02",
+              "Furniture",
+              "Make everyone feel welcome. Tables, chairs and furnishings that bring comfort and character to your event.",
+            ],
+            [
+              "03",
+              "Décor & styling",
+              "The atmosphere is in the details. Considered colours, textures and finishing touches, shaped around your story.",
+            ],
+            [
+              "04",
+              "Event management",
+              "Enjoy being in the moment. Support with planning and coordination to bring the moving parts together.",
+            ],
+          ].map(([n, t, d]) => (
+            <article key={n}>
+              <span className="service-number">{n}</span>
+              <h3>{t}</h3>
+              <p>{d}</p>
+              <a href="#contact">
+                Let’s make it happen <span>↗</span>
+              </a>
+            </article>
+          ))}
+        </div>
+      </section>
+      <section className="gallery section" id="gallery">
+        <div className="section-heading">
+          <div>
+            <p className="eyebrow">A FEEL FOR YOUR CELEBRATION</p>
+            <h2>
+              So many ways
+              <br />
+              <em>to make it memorable.</em>
+            </h2>
+          </div>
+          <a
+            className="text-link"
+            href={site.instagram}
+            target="_blank"
+            rel="noreferrer"
+          >
+            See Moran’s work on Instagram ↗
+          </a>
+        </div>
+        <p className="gallery-note">
+          A little inspiration while our portfolio takes shape. Images below are
+          illustrative, not Moran Events projects.
+        </p>
+        <div className="filters" aria-label="Filter by event type">
+          {categories.map((c) => (
+            <button
+              type="button"
+              key={c}
+              aria-pressed={filter === c}
+              onClick={() => setFilter(c)}
+            >
+              {c}
+            </button>
+          ))}
+        </div>
+        <div className="gallery-grid">
+          {events
+            .filter((e) => filter === "All occasions" || e.category === filter)
+            .map((e) => (
+              <article className="event-card" key={e.title}>
+                <div className="event-image">
+                  <img
+                    src={e.image}
+                    alt={e.alt}
+                    loading="lazy"
+                    width="900"
+                    height="1000"
+                  />
+                  <span>INSPIRATION</span>
+                </div>
+                <div className="event-caption">
+                  <div>
+                    <p className="eyebrow">{e.category}</p>
+                    <h3>{e.title}</h3>
+                  </div>
+                  <a href="#contact" aria-label={`Enquire about ${e.category}`}>
+                    ↗
+                  </a>
+                </div>
+              </article>
+            ))}
+        </div>
+      </section>
+      <section className="process section" id="process">
+        <p className="eyebrow">FROM A LITTLE IDEA TO A LOVELY DAY</p>
+        <h2>
+          A thoughtful journey.
+          <br />
+          <em>Every step of the way.</em>
+        </h2>
+        <div className="steps">
+          {[
+            [
+              "01",
+              "Tell us your story",
+              "Share your occasion, your ideas and what matters most. We start by listening.",
+            ],
+            [
+              "02",
+              "Shape the details",
+              "Together, we explore the setting, styling and services that fit your celebration.",
+            ],
+            [
+              "03",
+              "Bring it to life",
+              "We coordinate the agreed details so you can welcome your guests and enjoy your day.",
+            ],
+          ].map(([n, t, d]) => (
+            <article key={n}>
+              <span>{n}</span>
+              <h3>{t}</h3>
+              <p>{d}</p>
+            </article>
+          ))}
+        </div>
+      </section>
+      <section className="contact section" id="contact">
+        <div className="contact-copy">
+          <p className="eyebrow">LET’S CREATE SOMETHING BEAUTIFUL</p>
+          <h2>
+            Your next chapter
+            <br />
+            <em>starts here.</em>
+          </h2>
+          <p>
+            A wedding, a family tradition, a company milestone.
+            <br />
+            Whatever brings you together, we’d love to help
+            <br />
+            make it special.
+          </p>
+          <a
+            className="text-link"
+            href={site.instagram}
+            target="_blank"
+            rel="noreferrer"
+          >
+            Find us @moraneventske ↗
+          </a>
+          <div className="contact-details">
+            <p>
+              <span>BASED IN</span>Kenya
+            </p>
+            <p>
+              <span>EMAIL</span>
+              <a href={`mailto:${site.email}`}>{site.email}</a>
+            </p>
+            <p>
+              <span>PHONE / WHATSAPP</span>0726659247
+            </p>
+          </div>
+          <button
+            className="button dark"
+            type="button"
+            onClick={() =>
+              site.whatsapp
+                ? window.open(
+                    `https://wa.me/${site.whatsapp.replace(/\D/g, "")}`,
+                    "_blank",
+                    "noopener,noreferrer",
+                  )
+                : setWhatsappNotice(true)
+            }
+          >
+            Enquire on WhatsApp ↗
+          </button>
+          {whatsappNotice && (
+            <p role="status" className="notice">
+              Our WhatsApp number will be added soon. Please message{" "}
+              <a href={site.instagram} target="_blank" rel="noreferrer">
+                @moraneventske on Instagram
+              </a>
+              .
+            </p>
+          )}
+        </div>
+        <form onSubmit={prepareEnquiry}>
+          <h3>Tell us about your event</h3>
+          <p className="form-intro">
+            A few details are all we need to start the conversation.
+          </p>
+          <div className="form-grid">
+            <label>
+              Your name
+              <input
+                name="name"
+                autoComplete="name"
+                placeholder="Full name"
+                required
+                maxLength={100}
+              />
+            </label>
+            <label>
+              Email address
+              <input
+                name="email"
+                type="email"
+                autoComplete="email"
+                placeholder="you@example.com"
+                required
+                maxLength={200}
+              />
+            </label>
+            <label>
+              Phone number
+              <input
+                name="phone"
+                type="tel"
+                autoComplete="tel"
+                placeholder="+254 …"
+                required
+                maxLength={30}
+              />
+            </label>
+            <label>
+              Event type
+              <select name="type" required defaultValue="">
+                <option value="" disabled>
+                  Select your occasion
+                </option>
+                {categories.slice(1).map((c) => (
+                  <option key={c}>{c}</option>
+                ))}
+                <option>Other</option>
+              </select>
+            </label>
+            <label>
+              Event date <small>(if known)</small>
+              <input
+                name="date"
+                type="date"
+                min={new Date().toLocaleDateString("en-CA")}
+              />
+            </label>
+            <label>
+              Expected guests
+              <input
+                name="guests"
+                type="number"
+                min="1"
+                max="100000"
+                placeholder="Approximate number"
+                required
+              />
+            </label>
+            <label className="full">
+              Event location
+              <input
+                name="location"
+                placeholder="Town, venue or area in Kenya"
+                required
+                maxLength={200}
+              />
+            </label>
+            <label className="full">
+              What do you have in mind?
+              <textarea
+                name="description"
+                rows={3}
+                placeholder="Tell us about your ideas and the services you need…"
+                required
+                maxLength={2500}
+              />
+            </label>
+          </div>
+          <p className="form-note">
+            Submitting opens WhatsApp with your enquiry. Review the message and
+            tap Send there; this website does not store your details.
+          </p>
+          <button type="submit" className="button dark submit">
+            SEND INQUIRY<span>↗</span>
+          </button>
+          {message && (
+            <div className="message-panel" aria-live="polite">
+              <h4>Your enquiry is ready in WhatsApp</h4>
+              <textarea
+                aria-label="Your prepared enquiry"
+                readOnly
+                value={message}
+                rows={8}
+              />
+              <button
+                className="button dark"
+                type="button"
+                onClick={copyMessage}
+              >
+                {copied ? "Copied ✓" : "Copy enquiry"}
+              </button>
+              <a
+                className="text-link"
+                href={`https://wa.me/${site.whatsapp}?text=${encodeURIComponent(message)}`}
+                target="_blank"
+                rel="noreferrer"
+              >
+                Open WhatsApp ↗
+              </a>
+              <p>
+                Review and send the message in WhatsApp. If it did not open, use
+                the button above.
+              </p>
+            </div>
+          )}
+        </form>
+      </section>
+      <footer>
+        <div className="footer-top">
+          <a href="#top">
+            <img
+              src="/images/moran-logo.png"
+              width="135"
+              height="100"
+              alt="Moran Events"
+            />
+          </a>
+          <p>
+            Beautifully planned.
+            <br />
+            <em>Unforgettably celebrated.</em>
+          </p>
+          <a href={site.instagram} target="_blank" rel="noreferrer">
+            Instagram ↗
+          </a>
+        </div>
+        <div className="footer-bottom">
+          <span>
+            © {new Date().getFullYear()} Moran Events. Made for moments that
+            matter.
+          </span>
+          <a href="#top">Back to top ↑</a>
+        </div>
+      </footer>
+    </main>
+  );
+}
